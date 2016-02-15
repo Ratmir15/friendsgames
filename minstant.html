@@ -1,0 +1,123 @@
+<head>
+  <title>minstant</title>
+</head>
+
+<body>
+</body>
+
+<!-- this is the main template used by iron:router to build the page -->
+<template name="ApplicationLayout">
+	{{> yield "header"}}
+	
+	<div class="container">
+	{{> yield "main"}}
+	</div>
+</template>
+
+<!-- top level template for the nav bar -->
+<template name="navbar">
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/">
+        Tic-tac-toe!
+      </a>
+    </div>
+    <div class="nav navbar-nav">
+    {{> loginButtons}}
+</div>
+  </div>
+</nav>
+</template>
+
+<!-- Top level template for the lobby page -->
+<template name="lobby_page">
+	{{> available_user_list}}
+</template>
+
+<!-- display a list of users -->
+<template name="available_user_list">
+	<h3>user with password 'test123' and username/ email: user1@test.com - user8@test.com</h3>
+	<h2>Choose someone to play game with:</h2>
+	<div class="row">
+	{{#each users}}
+	{{> available_user}}
+	{{/each}}
+</div>
+</template>
+
+<!-- display an individual user -->
+<template name="available_user">
+	<div class="col-md-2">
+		<div class="user_avatar">
+			{{#if isMyUser _id}} 
+			<div class="bg-success">{{getUsername _id}} (YOU)
+				<br/>
+				<img src="{{profile.avatar}}" class="avatar_img">			
+			</div>
+			{{else}}
+			<a href="/chat/{{_id}}">
+				{{getUsername _id}}
+				<br/>
+				<img src="{{profile.avatar}}" class="avatar_img">
+			</a>
+			{{/if}}
+		</div>
+	</div>
+</template>
+
+
+<!-- Top level template for the chat page -->
+<template name="chat_page">
+	<h2>Idea is tic-tac-toe. Implementation is not done yet. Type in the box below to send a message!</h2>
+	<div class="row">
+		<div class="col-md-6">
+			<table border="1" class="ttt">
+				<tr><td class="f00">{{field 0 0}}</td><td class="f01">{{field 0 1}}</td><td class="f02">{{field 0 2}}</td></tr>
+				<tr><td class="f10">{{field 1 0}}</td><td class="f11">{{field 1 1}}</td><td class="f12">{{field 1 2}}</td></tr>
+				<tr><td class="f20">{{field 2 0}}</td><td class="f21">{{field 2 1}}</td><td class="f22">{{field 2 2}}</td></tr>
+			</table>
+			<div class="clear">Clear</div>
+			<div>{{message}}</div>
+		</div>
+		<div class="col-md-6">
+			<div class="well well-lg">
+			{{#each messages}}
+			{{> chat_message}}
+			{{/each}}
+			</div>	
+		</div>
+	</div>
+    <div class="row">
+		<div class="col-md-9">
+			<form class="js-send-chat">
+			<input class="input" id="ibox" type="text" name="chat" placeholder="type a message here...">
+			<button class="btn btn-default">send</button>
+		</form>
+		</div>
+		<div class="col-md-3">
+			<form>
+				Some emoticons:
+				<ul class="nav nav-pills">
+					<li><a href="#">Home</a>
+							<img src="/images/emojis/bowtie.png" width="20" onclick="ib = document.getElementById('ibox'); ib.value = ib.value + ':bowtie:'; return false;">
+							<img src="/images/emojis/smile.png" width="20"  onclick="ib = document.getElementById('ibox'); ib.value = ib.value + ':smile:';return false;">
+							<img src="/images/emojis/kissing_heart.png" width="20"   onclick="ib = document.getElementById('ibox'); ib.value = ib.value + ':kissing_heart:';return false;">
+							<img src="/images/emojis/heart_eyes.png" width="20"   onclick="ib = document.getElementById('ibox'); ib.value = ib.value + ':heart_eyes:';return false;">
+							<img src="/images/emojis/joy.png" width="20"   onclick="ib = document.getElementById('ibox'); ib.value = ib.value + ':joy:';return false;">
+					</li>
+
+				</ul>
+			</form>
+		</div>
+	</div>
+</template>
+
+<!-- simple template that displays a message -->
+<template name="chat_message">
+	<img src="/{{avatar}}" alt="{{user}}" class="chat_avatar_img"/> said: {{#emoji}}{{text}}{{/emoji}}
+	<br>
+</template>
+
+
+
